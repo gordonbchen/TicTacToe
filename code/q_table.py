@@ -60,13 +60,8 @@ class QTable:
 
     def update(self, reached_states: List[str], outcome: int) -> None:
         """Update the q-table based on the game outcome."""
-        # # Calculate linearly-increasing increments to value moves closer to the win more highly.
-        # n_states = len(reached_states)
-        # eval_incs = np.arange(1, n_states + 1) / n_states
-
-        # TODO: best increment strategy.
-        # BUG: q-tables.
-        eval_incs = np.full(shape=len(reached_states), fill_value=1)
+        # TODO: reward backprop.
+        eval_incs = np.ones(shape=len(reached_states))
 
         if (outcome == Outcomes.X_WIN):
             # Invert increments if x won.
@@ -85,5 +80,7 @@ class QTable:
         # new_mean = old_mean * (n_before / n_new) + (new_value / n_new)
         old_mean = table_rows["eval"]
         n_new = table_rows["n_reached"]
-        # TODO: view vs copy problem.
-        self.table.loc[reached_states, "eval"] = old_mean * (n_new / (n_new + 1)) + (eval_incs / n_new)
+        table_rows[ "eval"] = old_mean * (n_new / (n_new + 1)) + (eval_incs / n_new)
+
+        # Update q-table.
+        self.table.loc[reached_states] = table_rows
