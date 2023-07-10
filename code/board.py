@@ -129,5 +129,6 @@ class Board:
 
     def get_board_state(self) -> str:
         """Get the str representation of the board state. Used for storing arrays in dict."""
+        # TODO: Board hash.
         state = "".join([str(i) for i in np.ravel(self.board)])
         return state
