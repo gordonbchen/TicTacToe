@@ -54,8 +54,13 @@ class Board:
 
     def get_n_move(state: np.ndarray) -> int:
         """Find the move number based on the # of empty squares. Starts on move 1."""
-        n_move = (9 - (np.sum(state == Codes.EMPTY))) + 1
+        n_move = (9 - Board.get_n_empty(state)) + 1
         return n_move
+
+    def get_n_empty(state: np.ndarray) -> int:
+        """Find the number of empty squares."""
+        n_empty = np.sum(state == Codes.EMPTY)
+        return n_empty
 
     def check_win(state: np.ndarray) -> Union[None, int]:
         """Check if there is a winner."""
@@ -92,7 +97,7 @@ class Board:
 
     def check_tie(state: np.ndarray) -> bool:
         """Check if the board is a tie game. Check after checking win."""
-        n_empty = np.sum(state == Codes.EMPTY)
+        n_empty = Board.get_n_empty(state)
         return n_empty == 0
 
     def get_move_state_map(state: np.ndarray) -> Dict[Move, np.ndarray]:
