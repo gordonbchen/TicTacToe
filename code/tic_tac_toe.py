@@ -1,6 +1,6 @@
 import numpy as np
 
-from typing import Union, Dict, NamedTuple
+from typing import Union, List, NamedTuple
 
 
 class Move(NamedTuple):
@@ -100,27 +100,33 @@ class Board:
         n_empty = Board.get_n_empty(state)
         return n_empty == 0
 
-    def get_move_state_map(state: np.ndarray) -> Dict[Move, np.ndarray]:
-        """Return a list of all possible next moves."""
-        move_state_map = {}
+    def get_poss_states(state: np.ndarray) -> List[np.ndarray]:
+        """Return a list of all possible next states."""
+        marker = Board.get_marker(state)
+
+        poss_states = []
         for n_row, row in enumerate(state):
             for n_col, square in enumerate(row):
                 # A move is possible if the square is empty.
                 if square == Codes.EMPTY:
-                    poss_move = Move(n_row, n_col)
-                    poss_state = Board.simulate_move(poss_move, state)
+                    # Create state copy.
+                    poss_state = state.copy()
 
-                    move_state_map[poss_move] = poss_state
+                    poss_state[n_row, n_col] = marker
+                    poss_states.append(poss_state)
 
-        return move_state_map
+        return poss_states
 
-    def simulate_move(move: Move, state: np.ndarray) -> np.ndarray:
-        """Get the board state after the move."""
-        # Make the move.
-        marker = Board.get_marker(state)
+    def get_move(curr_state: np.ndarray, desired_state: np.ndarray) -> Move:
+        """Get the move to go from the currrent to the desired state."""
+        # Get ind of square that is different.
+        flat_inds = np.arange(9)
+        diff_ind = int(flat_inds[curr_state.ravel() != desired_state.ravel()])
 
-        # Create state copy.
-        poss_state = state.copy()
-        poss_state[move.n_row, move.n_col] = marker
+        # Get row and col from flattened ind.
+        n_row = diff_ind // 3
+        n_col = diff_ind % 3
 
-        return poss_state
+        # Return move.
+        move = Move(n_row, n_col)
+        return move
