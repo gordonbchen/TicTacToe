@@ -10,7 +10,13 @@ from tic_tac_toe import Board, Codes, Move
 class Node:
     """A minimax node storing an eval and children nodes."""
 
-    def __init__(self, state: np.ndarray, eval: int, children: Union[None, List[Node]], use_max: bool) -> None:
+    def __init__(
+        self,
+        state: np.ndarray,
+        eval: int,
+        children: Union[None, List[Node]],
+        use_max: bool,
+    ) -> None:
         """Create the node."""
         self.state = state
         self.eval = eval
@@ -54,7 +60,10 @@ def create_minimax_tree(state: np.ndarray, use_max: bool) -> Node:
 
     # Recursively get eval of children nodes.
     poss_states = Board.get_poss_states(state)
-    children = [create_minimax_tree(poss_state, use_max=(not use_max)) for poss_state in poss_states]
+    children = [
+        create_minimax_tree(poss_state, use_max=(not use_max))
+        for poss_state in poss_states
+    ]
 
     # Get eval from children.
     poss_evals = [child.eval for child in children]
