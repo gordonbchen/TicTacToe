@@ -5,12 +5,14 @@ from typing import Union, Dict, NamedTuple
 
 class Move(NamedTuple):
     """A data struct to represent a tic-tac-toe move."""
+
     n_row: int
     n_col: int
 
 
 class Codes:
     """A class to store game codes like markers and outcomes."""
+
     EMPTY = 0
 
     X_MARK = 1
@@ -20,19 +22,21 @@ class Codes:
 
 class Board:
     """A Tic Tac Toe board."""
+
     SIDE_LENGTH = 3
 
     def __init__(self) -> None:
         """Initialize the empty board."""
         self.state = np.full(
-            shape=(Board.SIDE_LENGTH, Board.SIDE_LENGTH),
-            fill_value=Codes.EMPTY
+            shape=(Board.SIDE_LENGTH, Board.SIDE_LENGTH), fill_value=Codes.EMPTY
         )
 
     def make_move(self, move: Move) -> None:
         """Make a move."""
         # Check that the square is empty.
-        assert (self.state[move.n_row, move.n_col] == Codes.EMPTY), f"{move} is not an empty square!"
+        assert (
+            self.state[move.n_row, move.n_col] == Codes.EMPTY
+        ), f"{move} is not an empty square!"
 
         # Fill square with marker.
         marker = Board.get_marker(self.state)
@@ -43,7 +47,7 @@ class Board:
         n_move = Board.get_n_move(state)
 
         # X if the turn is odd, O if even.
-        if (n_move % 2 == 1):
+        if n_move % 2 == 1:
             return Codes.X_MARK
         else:
             return Codes.O_MARK
@@ -70,7 +74,7 @@ class Board:
         # Check if either player marker is in the means.
         for means in slice_means:
             for marker in [Codes.O_MARK, Codes.X_MARK]:
-                if (marker in means):
+                if marker in means:
                     return marker
         return None
 
@@ -89,15 +93,15 @@ class Board:
     def check_tie(state: np.ndarray) -> bool:
         """Check if the board is a tie game. Check after checking win."""
         n_empty = np.sum(state == Codes.EMPTY)
-        return (n_empty == 0)
+        return n_empty == 0
 
     def get_move_state_map(state: np.ndarray) -> Dict[Move, np.ndarray]:
         """Return a list of all possible next moves."""
         move_state_map = {}
-        for (n_row, row) in enumerate(state):
-            for (n_col, square) in enumerate(row):
+        for n_row, row in enumerate(state):
+            for n_col, square in enumerate(row):
                 # A move is possible if the square is empty.
-                if (square == Codes.EMPTY):
+                if square == Codes.EMPTY:
                     poss_move = Move(n_row, n_col)
                     poss_state = Board.simulate_move(poss_move, state)
 

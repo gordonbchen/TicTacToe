@@ -7,10 +7,10 @@ def get_eval(state: np.ndarray, use_max: bool) -> int:
     """Get the state evaluation using minimax."""
     # Base cases of win and tie.
     winner = Board.check_win(state)
-    if (winner is not None):
+    if winner is not None:
         # Marks correspond to score: x = 1, o = -1.
         return winner
-    elif (Board.check_tie(state)):
+    elif Board.check_tie(state):
         # Tie corresponds to 0 score.
         return Codes.TIE
 
@@ -19,10 +19,12 @@ def get_eval(state: np.ndarray, use_max: bool) -> int:
 
     # Recursively get eval of children states.
     poss_states = move_state_map.values()
-    poss_evals = [get_eval(poss_state, use_max=(not use_max)) for poss_state in poss_states]
+    poss_evals = [
+        get_eval(poss_state, use_max=(not use_max)) for poss_state in poss_states
+    ]
 
     # Return min or max.
-    if (use_max is True):
+    if use_max is True:
         return max(poss_evals)
     else:
         return min(poss_evals)
@@ -36,10 +38,12 @@ def get_best_move(state: np.ndarray, use_max: bool) -> Move:
     poss_states = move_state_map.values()
 
     # Get evals of children.
-    poss_evals = [get_eval(poss_state, use_max=(not use_max)) for poss_state in poss_states]
+    poss_evals = [
+        get_eval(poss_state, use_max=(not use_max)) for poss_state in poss_states
+    ]
 
     # Get best state index.
-    if (use_max is True):
+    if use_max is True:
         best_eval = max(poss_evals)
     else:
         best_eval = min(poss_evals)
@@ -62,7 +66,7 @@ def play_game(human_first: bool) -> None:
         print(f"\nTurn {n_turn}:")
         print(board.state)
 
-        if (n_turn % 2 == human_first):
+        if n_turn % 2 == human_first:
             # Human player turn.
             n_row = int(input("Row: "))
             n_col = int(input("Col: "))
@@ -82,13 +86,13 @@ def play_game(human_first: bool) -> None:
 
         # Check if the game is over.
         winner = Board.check_win(board.state)
-        if (winner == Codes.X_MARK):
+        if winner == Codes.X_MARK:
             print("X won!")
             break
-        elif (winner == Codes.O_MARK):
+        elif winner == Codes.O_MARK:
             print("O won!")
             break
-        elif (Board.check_tie(board.state)):
+        elif Board.check_tie(board.state):
             print("TIE game!")
             break
 
@@ -96,5 +100,5 @@ def play_game(human_first: bool) -> None:
 if __name__ == "__main__":
     # Play the game.
     for i in range(3):
-        human_first = (i % 2 == 1)
+        human_first = i % 2 == 1
         play_game(human_first)
