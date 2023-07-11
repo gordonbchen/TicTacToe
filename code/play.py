@@ -13,10 +13,10 @@ def get_eval(state: np.ndarray, use_max: bool) -> int:
     elif (Board.check_tie(state)):
         # Tie corresponds to 0 score.
         return Codes.TIE
-    
+
     # Get possible children evals.
     move_state_map = Board.get_move_state_map(state)
-    
+
     # Recursively get eval of children states.
     poss_states = move_state_map.values()
     poss_evals = [get_eval(poss_state, use_max=(not use_max)) for poss_state in poss_states]
@@ -43,7 +43,7 @@ def get_best_move(state: np.ndarray, use_max: bool) -> Move:
         best_eval = max(poss_evals)
     else:
         best_eval = min(poss_evals)
-       
+
     best_state_ind = poss_evals.index(best_eval)
 
     # Map best state back to best move.
@@ -72,7 +72,6 @@ def play_game(human_first: bool) -> None:
             board.make_move(move)
         else:
             # Computer player turn.
-            marker = Board.get_marker(board.state)
             move = get_best_move(board.state, use_max=(human_first is False))
 
             # Make move.
@@ -84,13 +83,13 @@ def play_game(human_first: bool) -> None:
         # Check if the game is over.
         winner = Board.check_win(board.state)
         if (winner == Codes.X_MARK):
-            print(f"X won!")
+            print("X won!")
             break
         elif (winner == Codes.O_MARK):
-            print(f"O won!")
+            print("O won!")
             break
         elif (Board.check_tie(board.state)):
-            print(f"TIE game!")
+            print("TIE game!")
             break
 
 

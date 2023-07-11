@@ -1,6 +1,6 @@
 import numpy as np
 
-from typing import Union, List, Dict, NamedTuple
+from typing import Union, Dict, NamedTuple
 
 
 class Move(NamedTuple):
@@ -33,7 +33,7 @@ class Board:
         """Make a move."""
         # Check that the square is empty.
         assert (self.state[move.n_row, move.n_col] == Codes.EMPTY), f"{move} is not an empty square!"
-        
+
         # Fill square with marker.
         marker = Board.get_marker(self.state)
         self.state[move.n_row, move.n_col] = marker
@@ -90,14 +90,6 @@ class Board:
         """Check if the board is a tie game. Check after checking win."""
         n_empty = np.sum(state == Codes.EMPTY)
         return (n_empty == 0)
-
-    def get_move_state_map(state: np.ndarray) -> Dict[Move, np.ndarray]:
-        """Find all possible next moves and corresponding board states."""
-        possible_moves = Board.get_possible_moves(state)
-        possible_states = [Board.simulate_move(move, state) for move in possible_moves]
-
-        move_state_map = dict(zip(possible_moves, possible_states))
-        return move_state_map
 
     def get_move_state_map(state: np.ndarray) -> Dict[Move, np.ndarray]:
         """Return a list of all possible next moves."""
