@@ -31,25 +31,27 @@ class Board:
 
     def make_move(self, move: Move) -> None:
         """Make a move."""
+        # Check that the square is empty.
+        assert (self.state[move.n_row, move.n_col] == Codes.EMPTY), f"{move} is not an empty square!"
+        
         # Fill square with marker.
-        marker = self.get_marker(self.board)
+        marker = Board.get_marker(self.state)
         self.state[move.n_row, move.n_col] = marker
-
-        # Increment moves.
-        self.n_move += 1
-
-    def get_n_move(state: np.ndarray) -> int:
-        """Find the move number based on the # of empty squares. Starts on move 1."""
-        n_move = (9 - state.count(Codes.EMPTY)) + 1
-        return n_move    
 
     def get_marker(state: np.ndarray) -> int:
         """Return the marker of the player whose turn it is."""
-        # X if the turn is even, O if odd.
-        if (self.n_move % 2 == 0):
+        n_move = Board.get_n_move(state)
+
+        # X if the turn is odd, O if even.
+        if (n_move % 2 == 1):
             return Codes.X_MARK
         else:
             return Codes.O_MARK
+
+    def get_n_move(state: np.ndarray) -> int:
+        """Find the move number based on the # of empty squares. Starts on move 1."""
+        n_move = (9 - (np.sum(state == Codes.EMPTY))) + 1
+        return n_move
 
     def check_win(state: np.ndarray) -> Union[None, int]:
         """Check if there is a winner."""
@@ -66,8 +68,8 @@ class Board:
         slice_means = [row_means, col_means, diag_means]
 
         # Check if either player marker is in the means.
-        for marker in [Codes.O_MARK, Codes.X_MARK]:
-            for means in slice_means:
+        for means in slice_means:
+            for marker in [Codes.O_MARK, Codes.X_MARK]:
                 if (marker in means):
                     return marker
         return None
@@ -86,7 +88,7 @@ class Board:
 
     def check_tie(state: np.ndarray) -> bool:
         """Check if the board is a tie game. Check after checking win."""
-        n_empty = state.count(Codes.EMPTY)
+        n_empty = np.sum(state == Codes.EMPTY)
         return (n_empty == 0)
 
     def get_move_state_map(state: np.ndarray) -> Dict[Move, np.ndarray]:
@@ -97,28 +99,27 @@ class Board:
         move_state_map = dict(zip(possible_moves, possible_states))
         return move_state_map
 
-    def get_possible_moves(state: np.ndarray) -> List[Move]:
+    def get_move_state_map(state: np.ndarray) -> Dict[Move, np.ndarray]:
         """Return a list of all possible next moves."""
-        possible_moves = []
+        move_state_map = {}
         for (n_row, row) in enumerate(state):
             for (n_col, square) in enumerate(row):
                 # A move is possible if the square is empty.
                 if (square == Codes.EMPTY):
-                    possible_move = Move(n_row, n_col)
-                    possible_moves.append(possible_move)
+                    poss_move = Move(n_row, n_col)
+                    poss_state = Board.simulate_move(poss_move, state)
 
-        return possible_moves
+                    move_state_map[poss_move] = poss_state
+
+        return move_state_map
 
     def simulate_move(move: Move, state: np.ndarray) -> np.ndarray:
         """Get the board state after the move."""
         # Make the move.
-        marker = self.get_marker()
-        self.board[move.n_row, move.n_col] = marker
+        marker = Board.get_marker(state)
 
-        # Get the board state.
-        next_state = self.get_board_state()
+        # Create state copy.
+        poss_state = state.copy()
+        poss_state[move.n_row, move.n_col] = marker
 
-        # Unmake the move (more efficient).
-        self.board[move.n_row, move.n_col] = Codes.EMPTY
-
-        return next_state
+        return poss_state
