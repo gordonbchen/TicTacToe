@@ -24,12 +24,14 @@ class Board:
     """A Tic Tac Toe board."""
 
     SIDE_LENGTH = 3
+    EMPTY_BOARD = np.full(
+        shape=(SIDE_LENGTH, SIDE_LENGTH), fill_value=Codes.EMPTY
+    )
 
     def __init__(self) -> None:
         """Initialize the empty board."""
-        self.state = np.full(
-            shape=(Board.SIDE_LENGTH, Board.SIDE_LENGTH), fill_value=Codes.EMPTY
-        )
+        # Empty board must be a static var so that minimax can access it.
+        self.state = np.copy(Board.EMPTY_BOARD)
 
     def make_move(self, move: Move) -> None:
         """Make a move."""
