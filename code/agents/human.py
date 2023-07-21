@@ -1,9 +1,10 @@
 import numpy as np
 
+from agents.agent import Agent
 from tic_tac_toe import Move
 
 
-class Human():
+class Human(Agent):
     """A human agent that plays tic-tac-toe."""
 
     def __init__(self) -> None:

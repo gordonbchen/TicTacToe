@@ -2,10 +2,11 @@ import numpy as np
 
 from hashlib import sha256
 
+from agents.agent import Agent
 from tic_tac_toe import Move, Board, Codes
 
 
-class Minimax():
+class Minimax(Agent):
     """An agent that plays tic-tac-toe using minimax."""
 
     def __init__(self, original_state: np.ndarray) -> None:
