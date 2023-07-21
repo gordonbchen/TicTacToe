@@ -9,10 +9,9 @@ from tic_tac_toe import Move, Board, Codes
 class Minimax(Agent):
     """An agent that plays tic-tac-toe using minimax."""
 
-    def __init__(self, original_state: np.ndarray) -> None:
+    def __init__(self) -> None:
         """Initialize the minimax tree for tic-tac-toe."""
         self.state_eval_map = {}
-        self._calc_eval(original_state)
 
     def _calc_eval(self, curr_state: np.ndarray) -> float:
         """
@@ -63,6 +62,10 @@ class Minimax(Agent):
 
     def get_move(self, state: np.ndarray) -> Move:
         """Get the best move at the current state."""
+        # Calculate the necessary minimax tree branches (lazy eval).
+        if self._hash_state(state) not in self.state_eval_map:
+            self._calc_eval(state)
+
         # Get child states, hashes, and evals.
         child_states = Board.get_poss_states(state)
         child_hashes = [self._hash_state(child_state) for child_state in child_states]
@@ -79,3 +82,7 @@ class Minimax(Agent):
         best_move = Board.get_move(state, best_state)
 
         return best_move
+
+    def __str__(self) -> str:
+        """Return the name of the minimax agent."""
+        return "Minimax"

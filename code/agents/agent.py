@@ -9,3 +9,7 @@ class Agent:
     def get_move(state: np.ndarray) -> Move:
         """Get the agent's move at the given state."""
         pass
+
+    def __str__() -> str:
+        """Return the name of the agent."""
+        pass
