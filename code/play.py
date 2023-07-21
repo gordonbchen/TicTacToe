@@ -46,4 +46,4 @@ if __name__ == "__main__":
     minimax_agent = Minimax()
 
     # Play tic-tac-toe.
-    play_game(human_agent, minimax_agent)
+    play_game(minimax_agent, human_agent)
