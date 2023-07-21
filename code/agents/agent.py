@@ -13,4 +13,3 @@ class Agent:
     def __str__() -> str:
         """Return the name of the agent."""
         pass
-    

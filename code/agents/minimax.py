@@ -82,7 +82,7 @@ class Minimax(Agent):
         best_move = Board.get_move(state, best_state)
 
         return best_move
-    
+
     def __str__(self) -> str:
         """Return the name of the minimax agent."""
         return "Minimax"
