@@ -43,7 +43,7 @@ def play_game(agent_1: Agent, agent_2: Agent) -> None:
 if __name__ == "__main__":
     # Create agents.
     human_agent = Human("Gordon")
-    minimax_agent = Minimax(Board.EMPTY_BOARD)
+    minimax_agent = Minimax()
 
     # Play tic-tac-toe.
-    play_game(minimax_agent, human_agent)
+    play_game(human_agent, minimax_agent)
