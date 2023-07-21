@@ -27,12 +27,15 @@ class Minimax(Agent):
             eval = self.state_eval_map[state_hash]
             return eval
 
-        # Check if the game is won or tied at the state.
+        # Check if the game is won.
         winner = Board.check_win(curr_state)
         if winner is not None:
             self.state_eval_map[state_hash] = winner
             return winner
-        elif Board.check_tie(curr_state) is True:
+
+        # Check if the game is a tie.
+        # NOTE: crazy bug when checking (tie is True).
+        if Board.check_tie(curr_state):
             # TODO: 0 to 1 vs. -1 to 1.
             self.state_eval_map[state_hash] = Codes.TIE
             return Codes.TIE
